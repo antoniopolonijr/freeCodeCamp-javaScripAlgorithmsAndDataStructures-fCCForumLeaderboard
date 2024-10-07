@@ -18,6 +18,26 @@ const allCategories = {
   560: { category: "Backend Development", className: "backend" },
 };
 
+// function to retrieve the category name from the allCategories object.
+const forumCategory = (id) => {
+  let selectedCategory = {}; // to store the category name and class name for each category.
+  if (allCategories.hasOwnProperty(id)) {
+    // to check if the allCategories object has a property of id
+    const { className, category } = allCategories[id]; // destructure className and category from the allCategories[id] object.
+    selectedCategory.className = className; // to add the className property to your selectedCategory object.
+    selectedCategory.category = category; // to add the category property to your selectedCategory object.
+  } else {
+    // If the id is not in the allCategories object, you will need to display the General category.
+    selectedCategory.className = "general";
+    selectedCategory.category = "General";
+    selectedCategory.id = 1;
+  }
+  const url = `${forumCategoryUrl}${selectedCategory.className}/${id}`; // Every category will have a URL that points to the category on the freeCodeCamp forum.
+  const linkText = selectedCategory.category; // This will display the name of the category in the anchor element.
+  const linkClass = `category ${selectedCategory.className}`; // These class names will be used to apply styles for the anchor element.
+  return `<a href="${url}" class="${linkClass}" target="_blank">${linkText}</a>`;
+};
+
 // to calculate the difference between the current time and the time of the last activity on a topic. This will allow you to display how much time has passed since a topic had any activity.
 const timeAgo = (time) => {
   const currentTime = new Date(); // represents the current date and time
@@ -106,6 +126,7 @@ const showLatestPosts = (data) => {
       return `<tr>
       <td>
       <p class="post-title">${title}</p>
+      ${forumCategory(category_id)}
       </td>
       <td></td>
       <td>${posts_count - 1}</td>

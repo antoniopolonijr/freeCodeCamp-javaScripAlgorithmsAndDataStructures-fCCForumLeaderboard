@@ -65,6 +65,23 @@ const viewCount = (views) => {
   return views;
 };
 
+// Each forum post will include a list of user avatar images which represent all of the users participating in the conversation for that topic.
+const avatars = (posters, users) => {
+  return posters
+    .map((poster) => {
+      const user = users.find((user) => user.id === poster.user_id); // to find the correct user in the users array.
+      if (user) {
+        // check if the user exists
+        const avatar = user.avatar_template.replace(/{size}/, 30); // To customize the avatar's size, you can set it to a value of 30
+        const userAvatarUrl = avatar.startsWith("/user_avatar/")
+          ? avatarUrl.concat(avatar)
+          : avatar; // This will ensure the avatar URL is correctly formed whether it's a relative or absolute URL.
+        return `<img src="${userAvatarUrl}" alt="${user.name}">`; // to return the image for the user avatar.
+      }
+    }) // to loop through the posters array to get all of their avatars.
+    .join(""); //
+};
+
 /*
 To populate the forum leaderboard with data, you will need to request the data from an API. This is known as an asynchronous operation, which means that tasks execute independently of the main program flow.
 You can use the async keyword to create an asynchronous function, which returns a promise.
@@ -128,7 +145,7 @@ const showLatestPosts = (data) => {
       <p class="post-title">${title}</p>
       ${forumCategory(category_id)}
       </td>
-      <td></td>
+      <td><div class="avatar-container">${avatars(posters, users)}</div></td>
       <td>${posts_count - 1}</td>
       <td>${viewCount(views)}</td>
       <td>${timeAgo(bumped_at)}</td>
@@ -139,6 +156,7 @@ const showLatestPosts = (data) => {
       // In the fourth td element, add an embedded expression that contains the views variable. This will display the number of views the post has. // update the current value to instead call the viewCount function
       // to display data in the Activity column, you need to use the bumped_at property of each topic, which is a timestamp in the ISO 8601 format. You need to process this data before you can show how much time has passed since a topic had any activity.
       // To display the time since the last post, call the timeAgo function and pass in the bumped_at variable for the argument. Place this function call inside the last td element.
+      // to add the functionality to display the user avatars.
     })
     .join(""); // In the preview window, you should see a column of commas. To fix this, you should chain the join method to your map method.
   // to start populating the data inside the postsContainer.

@@ -142,7 +142,7 @@ const showLatestPosts = (data) => {
       } = item;
       return `<tr>
       <td>
-      <p class="post-title">${title}</p>
+      <a class="post-title" target="_blank" href="${forumTopicUrl}${slug}/${id}">${title}</a>
       ${forumCategory(category_id)}
       </td>
       <td><div class="avatar-container">${avatars(posters, users)}</div></td>
@@ -157,6 +157,7 @@ const showLatestPosts = (data) => {
       // to display data in the Activity column, you need to use the bumped_at property of each topic, which is a timestamp in the ISO 8601 format. You need to process this data before you can show how much time has passed since a topic had any activity.
       // To display the time since the last post, call the timeAgo function and pass in the bumped_at variable for the argument. Place this function call inside the last td element.
       // to add the functionality to display the user avatars.
+      // Users should be able to click on any post title and be directed to the actual post on the freeCodeCamp forum.
     })
     .join(""); // In the preview window, you should see a column of commas. To fix this, you should chain the join method to your map method.
   // to start populating the data inside the postsContainer.
